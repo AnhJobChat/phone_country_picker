@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:phone_country_picker/constant/app_colors.dart';
 
 class ImageDescriptionItem extends StatelessWidget {
   final String imageUrl;
@@ -21,8 +22,8 @@ class ImageDescriptionItem extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 10),
     this.imageWidth,
     this.imageHeight,
-    this.descriptionStyle = const TextStyle(fontSize: 14, color: Colors.black),
-    this.trailingDescriptionStyle = const TextStyle(fontSize: 14, color: Colors.black),
+    this.descriptionStyle = const TextStyle(fontSize: 14, color: AppColors.black),
+    this.trailingDescriptionStyle = const TextStyle(fontSize: 14, color: AppColors.black),
     this.onTap,
   });
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'constant/app_colors.dart';
+import '../constant/app_colors.dart';
+import '../model/phone_country.dart';
+import '../model/phone_country_model.dart';
+import '../resource/app_localizations.dart';
+import '../utils/screen_utils.dart';
 import 'image_description_item.dart';
-import 'model/phone_country.dart';
-import 'model/phone_country_model.dart';
-import 'resource/app_localizations.dart';
-import 'utils/screen_utils.dart';
 
 class TextFieldWithPhoneCountry extends StatefulWidget {
   final String phoneNumber;
