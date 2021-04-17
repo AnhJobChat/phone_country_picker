@@ -3,10 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-enum Localize {
-  en,
-  vi,
-}
+enum Localize { en, vi }
 
 extension ValueLocalize on Localize {
   String title() {
@@ -106,7 +103,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   bool shouldReload(LocalizationsDelegate<AppLocalizations> old) => false;
 }
 
-/// Localize
+/// Localize to translate depend to your country
 extension Translate on AppLocalizations {
   String get yourPhoneNumber => this.translate('Your phone number');
 }

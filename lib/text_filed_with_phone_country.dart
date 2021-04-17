@@ -65,7 +65,7 @@ class _TextFieldWithPhoneCountryState extends State<TextFieldWithPhoneCountry> {
         borderRadius: BorderRadius.circular(6),
       ),
       child: Stack(
-        overflow: Overflow.visible,
+        clipBehavior: Clip.none,
         children: <Widget>[
           Row(
             children: <Widget>[

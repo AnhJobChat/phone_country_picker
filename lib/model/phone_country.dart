@@ -11,6 +11,7 @@ class PhoneCountry {
   /// the dial code (+39,+93..)
   final String code;
 
+  /// get image url depend to your country code selected
   get imageUrl => AssetsImage.countryFlag(countryCode: code);
 
   PhoneCountry({

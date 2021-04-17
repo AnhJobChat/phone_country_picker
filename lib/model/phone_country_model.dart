@@ -12,6 +12,7 @@ class PhoneCountryModel extends PhoneCountry {
     @required String code,
   }) : super(name: name, dialCode: dialCode, code: code);
 
+  //Load and parse country_codes.json file
   static Future<List<PhoneCountry>> get values async {
     final String jsonString = await rootBundle.loadString(countryCodePath);
     List<dynamic> jsonObjects = json.decode(jsonString);

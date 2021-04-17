@@ -1,5 +1,8 @@
 import 'package:flutter/widgets.dart';
 
+/*
+ Measure the width, height depend to your device
+*/
 class ScreenUtils {
   static double screenHeight(BuildContext context, {double percent}) {
     return MediaQuery.of(context).getHeight(percent: percent);

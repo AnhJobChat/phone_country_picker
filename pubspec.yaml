@@ -1,5 +1,5 @@
 name: phone_country_picker
-description: A new Flutter plugin.
+description: A flutter package for showing a country code selector. In addition it gives the possibility to select a list of favorites countries, as well as to search using a simple searchbox
 version: 0.0.1
 homepage: https://github.com/ThuyenPV/phone_country_picker
 
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^0.17.0
+  flutter_svg: ^0.21.0+1
 
 
 dev_dependencies:
