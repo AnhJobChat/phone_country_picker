@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:phone_country_picker/phone_country_picker.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('phone_country_picker');
@@ -15,9 +14,5 @@ void main() {
 
   tearDown(() {
     channel.setMockMethodCallHandler(null);
-  });
-
-  test('getPlatformVersion', () async {
-    expect(await PhoneCountryPicker.platformVersion, '42');
   });
 }
