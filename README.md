@@ -1,7 +1,7 @@
 <p align="center"><img src="https://github.com/ThuyenPV/phone_country_picker/blob/main/display/cover.gif?raw=true"/></p>
 
 <h1 align="center">Phone Country Picker</h1>
-<h align="center">https://pub.dev/packages/phone_country_picker</h2>
+<h2 align="center">https://pub.dev/packages/phone_country_picker</h2>
 
 <p align="center">A flutter package for showing a phone country selector. In addition it gives the possibility to select a list of favorites countries, as well as to search using a simple searchbox and it's supports i18n for 2 languages are english and vietnamese.
 </p><br>
