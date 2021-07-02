@@ -172,7 +172,7 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
                 child: Padding(
                   padding: widget.alignLeft
                       ? const EdgeInsets.only(right: 16.0, left: 8.0)
-                      : const EdgeInsets.only(right: 16.0),
+                      : const EdgeInsets.only(right: 2.0),
                   child: Image.asset(
                     selectedItem.flagUri,
                     package: 'phone_country_picker',
@@ -193,15 +193,11 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
               Flexible(
                 flex: widget.alignLeft ? 0 : 1,
                 fit: widget.alignLeft ? FlexFit.tight : FlexFit.loose,
-                child: Padding(
-                    padding: widget.alignLeft
-                        ? const EdgeInsets.only(right: 16.0, left: 8.0)
-                        : const EdgeInsets.only(right: 16.0),
-                    child: Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.grey,
-                      size: widget.flagWidth,
-                    )),
+                child: Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.grey,
+                  size: widget.flagWidth,
+                ),
               ),
           ],
         ),
