@@ -1,3 +1,7 @@
+## 1.0.6
+
+Update animation & scrollbar
+
 ## 1.0.2
 
 Update pubspec.yaml correctly

@@ -74,6 +74,12 @@ class PhoneCountryPicker extends StatefulWidget {
   /// Set to true if you want to show drop down button
   final bool showDropDownButton;
 
+  /// scroll bar thickness
+  final double thickness;
+
+  /// scroll bar radius
+  final Radius radius;
+
   PhoneCountryPicker({
     this.onChanged,
     this.onInit,
@@ -106,6 +112,8 @@ class PhoneCountryPicker extends StatefulWidget {
     this.dialogSize,
     this.dialogBackgroundColor,
     this.closeIcon = const Icon(Icons.close),
+    this.thickness = 5,
+    this.radius = const Radius.circular(20),
     Key key,
   }) : super(key: key);
 
@@ -145,6 +153,7 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
     Widget _widget;
     if (widget.builder != null)
       _widget = InkWell(
+        radius: 5.0,
         onTap: showCountryCodePickerDialog,
         child: widget.builder(selectedItem),
       );
@@ -277,28 +286,30 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
           barrierColor: widget.barrierColor,
           hideSearch: widget.hideSearch,
           closeIcon: widget.closeIcon,
+          thickness: widget.thickness,
+          radius: widget.radius,
         ),
       ),
-    ).then((e) {
-      if (e != null) {
+    ).then((countrySelected) {
+      if (countrySelected != null) {
         setState(() {
-          selectedItem = e;
+          selectedItem = countrySelected;
         });
 
-        _publishSelection(e);
+        _publishSelection(countrySelected);
       }
     });
   }
 
-  void _publishSelection(CountryCode e) {
+  void _publishSelection(CountryCode countryCode) {
     if (widget.onChanged != null) {
-      widget.onChanged(e);
+      widget.onChanged(countryCode);
     }
   }
 
-  void _onInit(CountryCode e) {
+  void _onInit(CountryCode countryCode) {
     if (widget.onInit != null) {
-      widget.onInit(e);
+      widget.onInit(countryCode);
     }
   }
 }

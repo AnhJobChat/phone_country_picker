@@ -26,6 +26,12 @@ class SelectionDialog extends StatefulWidget {
   /// elements passed as favorite
   final List<CountryCode> favoriteElements;
 
+  /// scroll bar thickness
+  final double thickness;
+
+  /// scroll bar radius
+  final Radius radius;
+
   SelectionDialog(
     this.elements,
     this.favoriteElements, {
@@ -44,6 +50,8 @@ class SelectionDialog extends StatefulWidget {
     this.barrierColor,
     this.hideSearch = false,
     this.closeIcon,
+    this.thickness = 5,
+    this.radius = const Radius.circular(20),
   })  : assert(searchDecoration != null, 'searchDecoration must not be null!'),
         this.searchDecoration = searchDecoration.prefixIcon == null
             ? searchDecoration.copyWith(prefixIcon: Icon(Icons.search))
@@ -54,9 +62,22 @@ class SelectionDialog extends StatefulWidget {
   State<StatefulWidget> createState() => _SelectionDialogState();
 }
 
-class _SelectionDialogState extends State<SelectionDialog> {
+class _SelectionDialogState extends State<SelectionDialog> with SingleTickerProviderStateMixin {
   /// this is useful for filtering purpose
   List<CountryCode> filteredElements;
+
+  AnimationController rotationController;
+
+  @override
+  void initState() {
+    filteredElements = widget.elements;
+    rotationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    rotationController.forward(from: 0.0); // it starts the animation
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -82,11 +103,18 @@ class _SelectionDialogState extends State<SelectionDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              IconButton(
-                padding: const EdgeInsets.all(0),
-                iconSize: 20,
-                icon: widget.closeIcon,
-                onPressed: () => Navigator.pop(context),
+              RotationTransition(
+                turns: CurvedAnimation(
+                  parent: rotationController,
+                  curve: Curves.easeIn,
+                  reverseCurve: Curves.bounceInOut,
+                ),
+                child: IconButton(
+                  padding: const EdgeInsets.all(0),
+                  iconSize: 25,
+                  icon: widget.closeIcon,
+                  onPressed: () => Navigator.pop(context),
+                ),
               ),
               if (!widget.hideSearch)
                 Padding(
@@ -98,36 +126,38 @@ class _SelectionDialogState extends State<SelectionDialog> {
                   ),
                 ),
               Expanded(
-                child: ListView(
-                  children: [
-                    widget.favoriteElements.isEmpty
-                        ? const DecoratedBox(decoration: BoxDecoration())
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ...widget.favoriteElements.map(
-                                (f) => SimpleDialogOption(
-                                  child: _buildOption(f),
-                                  onPressed: () {
-                                    _selectItem(f);
-                                  },
+                child: Scrollbar(
+                  thickness: widget.thickness,
+                  radius: widget.radius,
+                  child: ListView(
+                    children: [
+                      widget.favoriteElements.isEmpty
+                          ? const DecoratedBox(decoration: BoxDecoration())
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ...widget.favoriteElements.map(
+                                  (favouriteItems) => SimpleDialogOption(
+                                    child: _buildOption(favouriteItems),
+                                    onPressed: () => _selectItem(favouriteItems),
+                                  ),
                                 ),
-                              ),
-                              const Divider(),
-                            ],
+                                const Divider(),
+                              ],
+                            ),
+                      if (filteredElements.isEmpty)
+                        _buildEmptySearchWidget(context)
+                      else
+                        ...filteredElements.map(
+                          (e) => SimpleDialogOption(
+                            child: _buildOption(e),
+                            onPressed: () {
+                              _selectItem(e);
+                            },
                           ),
-                    if (filteredElements.isEmpty)
-                      _buildEmptySearchWidget(context)
-                    else
-                      ...filteredElements.map(
-                        (e) => SimpleDialogOption(
-                          child: _buildOption(e),
-                          onPressed: () {
-                            _selectItem(e);
-                          },
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -135,8 +165,8 @@ class _SelectionDialogState extends State<SelectionDialog> {
         ),
       );
 
-  Widget _buildOption(CountryCode e) {
-    return Container(
+  Widget _buildOption(CountryCode countryCode) {
+    return SizedBox(
       width: 400,
       child: Flex(
         direction: Axis.horizontal,
@@ -147,7 +177,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
               decoration: widget.flagDecoration,
               clipBehavior: widget.flagDecoration == null ? Clip.none : Clip.hardEdge,
               child: Image.asset(
-                e.flagUri,
+                countryCode.flagUri,
                 package: 'phone_country_picker',
                 width: widget.flagWidth,
               ),
@@ -155,7 +185,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
           Expanded(
             flex: 6,
             child: Text(
-              e.toCountryStringOnly(),
+              countryCode.toCountryStringOnly(),
               overflow: TextOverflow.fade,
               style: widget.textStyle,
             ),
@@ -163,7 +193,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
           Expanded(
             flex: 2,
             child: Text(
-              e.toString(),
+              countryCode.toString(),
               overflow: TextOverflow.fade,
               style: widget.textStyle,
             ),
@@ -181,12 +211,6 @@ class _SelectionDialogState extends State<SelectionDialog> {
     return Center(
       child: Text('No country found'),
     );
-  }
-
-  @override
-  void initState() {
-    filteredElements = widget.elements;
-    super.initState();
   }
 
   void _filterElements(String s) {
