@@ -1,5 +1,3 @@
-<p align="center"><img src="https://github.com/ThuyenPV/phone_country_picker/blob/main/display/cover.gif?raw=true"/></p>
-
 <h1 align="center">Phone Country Picker</h1>
 <h2 align="center">https://pub.dev/packages/phone_country_picker</h2>
 
