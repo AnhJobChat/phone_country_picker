@@ -8,7 +8,7 @@ class CountryLocalizations {
 
   CountryLocalizations(this.locale);
 
-  static CountryLocalizations of(BuildContext context) {
+  static CountryLocalizations? of(BuildContext context) {
     return Localizations.of<CountryLocalizations>(
       context,
       CountryLocalizations,
@@ -17,7 +17,7 @@ class CountryLocalizations {
 
   static const LocalizationsDelegate<CountryLocalizations> delegate = _CountryLocalizationsDelegate();
 
-  Map<String, String> _localizedStrings;
+  late Map<String, String> _localizedStrings;
 
   Future<bool> load() async {
     String languageJson = 'packages/phone_country_picker/i18n/${locale.languageCode}.json';
@@ -30,8 +30,8 @@ class CountryLocalizations {
     return true;
   }
 
-  String translate(String key) {
-    return _localizedStrings[key];
+  String? translate(String? key) {
+    return _localizedStrings[key!];
   }
 }
 

@@ -1,7 +1,7 @@
 library phone_country_picker;
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:phone_country_picker/country_code.dart';
 import 'package:phone_country_picker/country_codes.dart';
 import 'package:phone_country_picker/selection_dialog.dart';
@@ -9,39 +9,39 @@ import 'package:phone_country_picker/selection_dialog.dart';
 export 'country_code.dart';
 
 class PhoneCountryPicker extends StatefulWidget {
-  final ValueChanged<CountryCode> onChanged;
-  final ValueChanged<CountryCode> onInit;
-  final String initialSelection;
+  final ValueChanged<CountryCode>? onChanged;
+  final ValueChanged<CountryCode?>? onInit;
+  final String? initialSelection;
   final List<String> favorite;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final EdgeInsetsGeometry padding;
   final bool showCountryOnly;
   final InputDecoration searchDecoration;
-  final TextStyle searchStyle;
-  final TextStyle dialogTextStyle;
-  final WidgetBuilder emptySearchBuilder;
-  final Function(CountryCode) builder;
+  final TextStyle? searchStyle;
+  final TextStyle? dialogTextStyle;
+  final WidgetBuilder? emptySearchBuilder;
+  final Function(CountryCode?)? builder;
   final bool enabled;
   final TextOverflow textOverflow;
   final Icon closeIcon;
 
   /// Barrier color of ModalBottomSheet
-  final Color barrierColor;
+  final Color? barrierColor;
 
   /// Background color of ModalBottomSheet
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// BoxDecoration for dialog
-  final BoxDecoration boxDecoration;
+  final BoxDecoration? boxDecoration;
 
   /// the size of the selection dialog
-  final Size dialogSize;
+  final Size? dialogSize;
 
   /// Background color of selection dialog
-  final Color dialogBackgroundColor;
+  final Color? dialogBackgroundColor;
 
   /// used to customize the country list
-  final List<String> countryFilter;
+  final List<String>? countryFilter;
 
   /// shows the name of the country instead of the dialcode
   final bool showOnlyCountryWhenClosed;
@@ -58,15 +58,15 @@ class PhoneCountryPicker extends StatefulWidget {
 
   final bool hideMainText;
 
-  final bool showFlagMain;
+  final bool? showFlagMain;
 
-  final bool showFlagDialog;
+  final bool? showFlagDialog;
 
   /// Width of the flag images
   final double flagWidth;
 
   /// Use this property to change the order of the options
-  final Comparator<CountryCode> comparator;
+  final Comparator<CountryCode>? comparator;
 
   /// Set to true if you want to hide the search part
   final bool hideSearch;
@@ -114,21 +114,22 @@ class PhoneCountryPicker extends StatefulWidget {
     this.closeIcon = const Icon(Icons.close),
     this.thickness = 5,
     this.radius = const Radius.circular(20),
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
     List<Map> jsonList = codes;
 
-    List<CountryCode> elements = jsonList.map((json) => CountryCode.fromJson(json)).toList();
+    List<CountryCode> elements =
+        jsonList.map((json) => CountryCode.fromJson(json as Map<String, dynamic>)).toList();
 
     if (comparator != null) {
       elements.sort(comparator);
     }
 
-    if (countryFilter != null && countryFilter.isNotEmpty) {
-      final uppercaseCustomList = countryFilter.map((c) => c.toUpperCase()).toList();
+    if (countryFilter != null && countryFilter!.isNotEmpty) {
+      final uppercaseCustomList = countryFilter!.map((c) => c.toUpperCase()).toList();
       elements = elements
           .where((c) =>
               uppercaseCustomList.contains(c.code) ||
@@ -142,7 +143,7 @@ class PhoneCountryPicker extends StatefulWidget {
 }
 
 class PhoneCountryPickerState extends State<PhoneCountryPicker> {
-  CountryCode selectedItem;
+  CountryCode? selectedItem;
   List<CountryCode> elements = [];
   List<CountryCode> favoriteElements = [];
 
@@ -155,7 +156,7 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
       _widget = InkWell(
         radius: 5.0,
         onTap: showCountryCodePickerDialog,
-        child: widget.builder(selectedItem),
+        child: widget.builder!(selectedItem),
       );
     else {
       _widget = FlatButton(
@@ -165,7 +166,7 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
           direction: Axis.horizontal,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            if (widget.showFlagMain != null ? widget.showFlagMain : widget.showFlag)
+            if (widget.showFlagMain != null ? widget.showFlagMain! : widget.showFlag)
               Flexible(
                 flex: widget.alignLeft ? 0 : 1,
                 fit: widget.alignLeft ? FlexFit.tight : FlexFit.loose,
@@ -174,7 +175,7 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
                       ? const EdgeInsets.only(right: 16.0, left: 8.0)
                       : const EdgeInsets.only(right: 2.0),
                   child: Image.asset(
-                    selectedItem.flagUri,
+                    selectedItem!.flagUri!,
                     package: 'phone_country_picker',
                     width: widget.flagWidth,
                   ),
@@ -184,7 +185,7 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
               Flexible(
                 fit: widget.alignLeft ? FlexFit.tight : FlexFit.loose,
                 child: Text(
-                  widget.showOnlyCountryWhenClosed ? selectedItem.toCountryStringOnly() : selectedItem.toString(),
+                  widget.showOnlyCountryWhenClosed ? selectedItem!.toCountryStringOnly() : selectedItem.toString(),
                   style: widget.textStyle ?? Theme.of(context).textTheme.button,
                   overflow: widget.textOverflow,
                 ),
@@ -222,9 +223,9 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
       if (widget.initialSelection != null) {
         selectedItem = elements.firstWhere(
             (e) =>
-                (e.code.toUpperCase() == widget.initialSelection.toUpperCase()) ||
+                (e.code!.toUpperCase() == widget.initialSelection!.toUpperCase()) ||
                 (e.dialCode == widget.initialSelection) ||
-                (e.name.toUpperCase() == widget.initialSelection.toUpperCase()),
+                (e.name!.toUpperCase() == widget.initialSelection!.toUpperCase()),
             orElse: () => elements[0]);
       } else {
         selectedItem = elements[0];
@@ -240,9 +241,9 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
     if (widget.initialSelection != null) {
       selectedItem = elements.firstWhere(
           (e) =>
-              (e.code.toUpperCase() == widget.initialSelection.toUpperCase()) ||
+              (e.code!.toUpperCase() == widget.initialSelection!.toUpperCase()) ||
               (e.dialCode == widget.initialSelection) ||
-              (e.name.toUpperCase() == widget.initialSelection.toUpperCase()),
+              (e.name!.toUpperCase() == widget.initialSelection!.toUpperCase()),
           orElse: () => elements[0]);
     } else {
       selectedItem = elements[0];
@@ -250,40 +251,43 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
 
     favoriteElements = elements
         .where((e) =>
-            widget.favorite.firstWhere(
-                (f) =>
-                    e.code.toUpperCase() == f.toUpperCase() ||
-                    e.dialCode == f ||
-                    e.name.toUpperCase() == f.toUpperCase(),
-                orElse: () => null) !=
+            widget.favorite.firstWhereOrNull((f) =>
+                e.code!.toUpperCase() == f.toUpperCase() ||
+                e.dialCode == f ||
+                e.name!.toUpperCase() == f.toUpperCase()) !=
             null)
         .toList();
   }
 
   void showCountryCodePickerDialog() {
-    showMaterialModalBottomSheet(
+    showDialog(
       barrierColor: widget.barrierColor ?? Colors.grey.withOpacity(0.5),
-      backgroundColor: widget.backgroundColor ?? Colors.transparent,
       context: context,
       builder: (context) => Center(
-        child: SelectionDialog(
-          elements,
-          favoriteElements,
-          showCountryOnly: widget.showCountryOnly,
-          emptySearchBuilder: widget.emptySearchBuilder,
-          searchDecoration: widget.searchDecoration,
-          searchStyle: widget.searchStyle,
-          textStyle: widget.dialogTextStyle,
-          boxDecoration: widget.boxDecoration,
-          showFlag: widget.showFlagDialog != null ? widget.showFlagDialog : widget.showFlag,
-          flagWidth: widget.flagWidth,
-          size: widget.dialogSize,
-          backgroundColor: widget.dialogBackgroundColor,
-          barrierColor: widget.barrierColor,
-          hideSearch: widget.hideSearch,
-          closeIcon: widget.closeIcon,
-          thickness: widget.thickness,
-          radius: widget.radius,
+        child: AlertDialog(
+          titlePadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          contentPadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          content: SelectionDialog(
+            elements,
+            favoriteElements,
+            showCountryOnly: widget.showCountryOnly,
+            emptySearchBuilder: widget.emptySearchBuilder,
+            searchDecoration: widget.searchDecoration,
+            searchStyle: widget.searchStyle,
+            textStyle: widget.dialogTextStyle,
+            boxDecoration: widget.boxDecoration,
+            showFlag: widget.showFlagDialog != null ? widget.showFlagDialog : widget.showFlag,
+            flagWidth: widget.flagWidth,
+            size: widget.dialogSize,
+            backgroundColor: widget.dialogBackgroundColor,
+            barrierColor: widget.barrierColor,
+            hideSearch: widget.hideSearch,
+            closeIcon: widget.closeIcon,
+            thickness: widget.thickness,
+            radius: widget.radius,
+          ),
         ),
       ),
     ).then((countrySelected) {
@@ -299,13 +303,13 @@ class PhoneCountryPickerState extends State<PhoneCountryPicker> {
 
   void _publishSelection(CountryCode countryCode) {
     if (widget.onChanged != null) {
-      widget.onChanged(countryCode);
+      widget.onChanged!(countryCode);
     }
   }
 
-  void _onInit(CountryCode countryCode) {
+  void _onInit(CountryCode? countryCode) {
     if (widget.onInit != null) {
-      widget.onInit(countryCode);
+      widget.onInit!(countryCode);
     }
   }
 }

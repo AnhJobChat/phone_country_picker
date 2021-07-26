@@ -4,24 +4,24 @@ import 'package:phone_country_picker/country_code.dart';
 /// selection dialog used for selection of the country code
 class SelectionDialog extends StatefulWidget {
   final List<CountryCode> elements;
-  final bool showCountryOnly;
+  final bool? showCountryOnly;
   final InputDecoration searchDecoration;
-  final TextStyle searchStyle;
-  final TextStyle textStyle;
-  final BoxDecoration boxDecoration;
-  final WidgetBuilder emptySearchBuilder;
-  final bool showFlag;
+  final TextStyle? searchStyle;
+  final TextStyle? textStyle;
+  final BoxDecoration? boxDecoration;
+  final WidgetBuilder? emptySearchBuilder;
+  final bool? showFlag;
   final double flagWidth;
-  final Decoration flagDecoration;
-  final Size size;
+  final Decoration? flagDecoration;
+  final Size? size;
   final bool hideSearch;
-  final Icon closeIcon;
+  final Icon? closeIcon;
 
   /// Background color of SelectionDialog
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// Boxshaow color of SelectionDialog that matches CountryCodePicker barrier color
-  final Color barrierColor;
+  final Color? barrierColor;
 
   /// elements passed as favorite
   final List<CountryCode> favoriteElements;
@@ -35,7 +35,7 @@ class SelectionDialog extends StatefulWidget {
   SelectionDialog(
     this.elements,
     this.favoriteElements, {
-    Key key,
+    Key? key,
     this.showCountryOnly,
     this.emptySearchBuilder,
     InputDecoration searchDecoration = const InputDecoration(),
@@ -64,9 +64,9 @@ class SelectionDialog extends StatefulWidget {
 
 class _SelectionDialogState extends State<SelectionDialog> with SingleTickerProviderStateMixin {
   /// this is useful for filtering purpose
-  List<CountryCode> filteredElements;
+  late List<CountryCode> filteredElements;
 
-  AnimationController rotationController;
+  late AnimationController rotationController;
 
   @override
   void initState() {
@@ -112,7 +112,7 @@ class _SelectionDialogState extends State<SelectionDialog> with SingleTickerProv
                 child: IconButton(
                   padding: const EdgeInsets.all(0),
                   iconSize: 25,
-                  icon: widget.closeIcon,
+                  icon: widget.closeIcon!,
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
@@ -171,13 +171,13 @@ class _SelectionDialogState extends State<SelectionDialog> with SingleTickerProv
       child: Flex(
         direction: Axis.horizontal,
         children: <Widget>[
-          if (widget.showFlag)
+          if (widget.showFlag!)
             Container(
               margin: const EdgeInsets.only(right: 16.0),
               decoration: widget.flagDecoration,
               clipBehavior: widget.flagDecoration == null ? Clip.none : Clip.hardEdge,
               child: Image.asset(
-                countryCode.flagUri,
+                countryCode.flagUri!,
                 package: 'phone_country_picker',
                 width: widget.flagWidth,
               ),
@@ -205,7 +205,7 @@ class _SelectionDialogState extends State<SelectionDialog> with SingleTickerProv
 
   Widget _buildEmptySearchWidget(BuildContext context) {
     if (widget.emptySearchBuilder != null) {
-      return widget.emptySearchBuilder(context);
+      return widget.emptySearchBuilder!(context);
     }
 
     return Center(
@@ -217,7 +217,7 @@ class _SelectionDialogState extends State<SelectionDialog> with SingleTickerProv
     s = s.toUpperCase();
     setState(() {
       filteredElements = widget.elements
-          .where((e) => e.code.contains(s) || e.dialCode.contains(s) || e.name.toUpperCase().contains(s))
+          .where((e) => e.code!.contains(s) || e.dialCode!.contains(s) || e.name!.toUpperCase().contains(s))
           .toList();
     });
   }
